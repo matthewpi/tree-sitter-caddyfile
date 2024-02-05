@@ -1,0 +1,18 @@
+=================
+URL with Fragment
+=================
+
+example.com
+
+redir https://example.com/#/about 302
+
+---
+
+(source_file
+	(sites
+		(single_site
+			(site_address)
+			(directive
+				(directive_name)
+				(url)
+				(int_literal)))))

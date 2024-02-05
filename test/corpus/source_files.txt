@@ -1,0 +1,38 @@
+=====================
+Nested Global Options
+=====================
+
+{
+	debug
+	admin off
+	on_demand_tls {
+		ask https://example.com
+	}
+}
+
+example.com
+
+root * /var/www
+
+---
+
+(source_file
+	(global_options
+		(directive
+			(directive_name))
+		(directive
+			(directive_name)
+			(argument))
+		(directive
+			(directive_name)
+			(block
+				(directive
+					(directive_name)
+					(url)))))
+	(sites
+		(single_site
+			(site_address)
+			(directive
+				(directive_name)
+				(matcher)
+				(argument)))))

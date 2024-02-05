@@ -1,0 +1,56 @@
+================================
+Environment Variable Placeholder
+================================
+
+example.com
+
+root * {$TEST}
+
+---
+
+(source_file
+	(sites
+		(single_site
+			(site_address)
+			(directive
+				(directive_name)
+				(matcher)
+				(placeholder)))))
+
+=================
+Array Placeholder
+=================
+
+example.com
+
+root * {args[0]}
+
+---
+
+(source_file
+	(sites
+		(single_site
+			(site_address)
+			(directive
+				(directive_name)
+				(matcher)
+				(placeholder)))))
+
+========================
+Nested Field Placeholder
+========================
+
+example.com
+
+root * {something.args[0]}
+
+---
+
+(source_file
+	(sites
+		(single_site
+			(site_address)
+			(directive
+				(directive_name)
+				(matcher)
+				(placeholder)))))

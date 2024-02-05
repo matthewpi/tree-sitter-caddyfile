@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  nix-flake-check:
+    name: nix flake check
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@cd46bde16ab981b0a7b2dce0574509104543276e # v9
+
+      - name: Nix Cache
+        uses: DeterminateSystems/magic-nix-cache-action@eeabdb06718ac63a7021c6132129679a8e22d0c7 # v3
+
+      - name: nix flake check
+        run: nix flake check --all-systems
+
+  tree-sitter:
+    name: tree-sitter test
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@cd46bde16ab981b0a7b2dce0574509104543276e # v9
+
+      - name: Nix Cache
+        uses: DeterminateSystems/magic-nix-cache-action@eeabdb06718ac63a7021c6132129679a8e22d0c7 # v3
+
+      - name: nix develop
+        uses: rrbutani/use-nix-shell-action@59a52b2b9bbfe3cc0e7deb8f9059abe37a439edf # v1.1.0
+        with:
+          devShell: .#default
+
+      - name: npm ci
+        run: npm ci
+
+      - name: Generate tree-sitter parser
+        run: npm run generate
+
+      - name: Check if auto-generated files are committed
+        run: |
+          git add .
+          if output="$(git status --porcelain=v2)"; then
+            files_changed_msg="$output"
+
+            diff="$(git diff --cached --color=never)"
+            if [ ${#diff} -gt 1000 ]; then
+              diff="${diff::1000}-- TRUNCATED --"
+            fi
+            echo "$diff"$'\n'
+          else
+            fail_code=$?
+          fi
+
+          if [ "${fail_code:-}" ]; then
+            exit $fail_code
+          elif [ "${files_changed_msg:-}" ]; then
+            >&2 echo \
+              "Detected changes after generating parser files:" \
+              $'\n'"$files_changed_msg"$'\n' \
+              $'\n'"Please commit those changes locally and push"
+            exit 1
+          fi
+
+      - name: Run tree-sitter tests
+        run: npm run test
