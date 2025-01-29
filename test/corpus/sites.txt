@@ -1,0 +1,109 @@
+============================
+Single-site with one address
+============================
+
+example.com
+
+root * /var/www
+
+---
+
+(source_file
+	(sites
+		(single_site
+			(site_address)
+			(directive
+				(directive_name)
+				(matcher)
+				(argument)))))
+
+===================================
+Single-site with multiple addresses
+===================================
+
+http://example.com:8080, https://fake.org:8443, fake.co.uk, {$ENV_SITE}
+
+---
+
+(source_file
+	(sites
+		(single_site
+			(site_address)
+			(site_address)
+			(site_address)
+			(site_address))))
+
+===============================
+Single-site with Global Options
+===============================
+
+{
+	hello
+}
+
+example.com
+
+root * /var/www
+
+
+---
+
+(source_file
+	(global_options
+		(directive
+			(directive_name)))
+	(sites
+		(single_site
+			(site_address)
+			(directive
+				(directive_name)
+				(matcher)
+				(argument)))))
+
+=================
+Single-site Block
+=================
+
+example.com {
+	respond "Hello, world!"
+}
+
+---
+
+(source_file
+	(sites
+		(site_definition
+			(site_address)
+			(block
+				(directive
+					(directive_name)
+					(interpreted_string_literal))))))
+
+====================
+Multiple Site Blocks
+====================
+
+example.com {
+	respond "Hello, world!"
+}
+
+foobar.com {
+	respond "Hello, world!"
+}
+
+---
+
+(source_file
+	(sites
+		(site_definition
+			(site_address)
+			(block
+				(directive
+					(directive_name)
+					(interpreted_string_literal))))
+		(site_definition
+			(site_address)
+			(block
+				(directive
+					(directive_name)
+					(interpreted_string_literal))))))

@@ -1,0 +1,24 @@
+================
+Character Escape
+================
+
+example.com
+
+respond "\"hello"
+
+root * /var/www
+
+---
+
+(source_file
+	(sites
+		(single_site
+			(site_address)
+			(directive
+				(directive_name)
+				(interpreted_string_literal
+				(escape_sequence)))
+			(directive
+				(directive_name)
+				(matcher)
+				(argument)))))

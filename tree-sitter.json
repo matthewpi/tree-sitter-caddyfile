@@ -1,0 +1,37 @@
+{
+  "grammars": [
+    {
+      "name": "caddyfile",
+      "camelcase": "Caddyfile",
+      "scope": "source.caddyfile",
+      "file-types": [
+        "Caddyfile",
+        "caddyfile"
+      ],
+      "injection-regex": "^caddyfile$"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Caddyfile grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "Matthew Penner",
+        "email": "me@matthewp.io",
+        "url": "https://github.com/matthewpi"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/matthewpi/tree-sitter-caddyfile"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true
+  }
+}
