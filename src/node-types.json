@@ -58,6 +58,10 @@
           "named": true
         },
         {
+          "type": "network_address",
+          "named": true
+        },
+        {
           "type": "placeholder",
           "named": true
         },
@@ -157,6 +161,10 @@
           "named": true
         },
         {
+          "type": "network_address",
+          "named": true
+        },
+        {
           "type": "placeholder",
           "named": true
         },
@@ -200,6 +208,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "network_address",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "placeholder",
@@ -364,6 +377,14 @@
   {
     "type": "escape_sequence",
     "named": true
+  },
+  {
+    "type": "http://",
+    "named": false
+  },
+  {
+    "type": "https://",
+    "named": false
   },
   {
     "type": "int_literal",

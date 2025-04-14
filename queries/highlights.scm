@@ -1,6 +1,7 @@
 [
 	(url)
 	(unix_socket)
+	(network_address)
 ] @type
 (placeholder) @constant
 

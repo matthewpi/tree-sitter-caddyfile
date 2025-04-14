@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/tree-sitter/tree-sitter/refs/heads/master/docs/src/assets/schemas/config.schema.json",
   "grammars": [
     {
       "name": "caddyfile",
@@ -8,7 +9,10 @@
         "Caddyfile",
         "caddyfile"
       ],
-      "injection-regex": "^caddyfile$"
+      "injection-regex": "^caddyfile$",
+      "highlights": "queries/highlights.scm",
+      "injections": "queries/injections.scm",
+      "locals": "queries/locals.scm"
     }
   ],
   "metadata": {

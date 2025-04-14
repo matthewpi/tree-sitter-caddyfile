@@ -1,0 +1,142 @@
+{
+	skip_install_trust
+	grace_period 5s
+	metrics
+
+	log {
+		format filter {
+			# request>remote_port delete
+			# request>tls delete
+			# request>headers delete
+			resp_headers delete
+		}
+	}
+
+	default_bind fdgram/3 {
+		protocols h3
+	}
+
+	default_bind fd/4 {
+		protocols h1
+	}
+
+	default_bind fd/5 {
+		protocols h1 h2
+	}
+
+	acme_dns cloudflare {file.{$CF_API_TOKEN_FILE}}
+	dns cloudflare {file.{$CF_API_TOKEN_FILE}}
+	ech ech.example.com
+}
+
+(block-metrics) {
+	handle /metrics* {
+		invoke 401
+	}
+}
+
+&(401) {
+	respond "access denied" 401 {
+		close
+	}
+}
+
+&(404) {
+	respond "404 route not found" 404 {
+		close
+	}
+}
+
+&(cache) {
+	reverse_proxy http://localhost:5000
+}
+
+&(forge) {
+	reverse_proxy unix//run/forgejo/forgejo.sock
+}
+
+&(grafana) {
+	reverse_proxy unix//run/grafana/grafana.sock
+}
+
+*.example.com {
+	log
+
+	tls {
+		dns cloudflare {file.{$CF_API_TOKEN_FILE}}
+	}
+
+	@cache host cache.example.com
+	handle @cache {
+		log_skip
+		invoke cache
+	}
+
+	@forge host forge.example.com
+	handle @forge {
+		import block-metrics
+		invoke forge
+	}
+
+	@grafana host grafana.example.com
+	handle @grafana {
+		import block-metrics
+		invoke grafana
+	}
+
+	@host host example.com
+	handle @host {
+		log_skip
+
+		handle /caddy/metrics {
+			metrics
+		}
+
+		handle /forgejo/metrics {
+			uri strip_prefix /forgejo
+			invoke forge
+		}
+
+		handle /grafana/metrics {
+			uri strip_prefix /grafana
+			invoke grafana
+		}
+
+		handle_path /node-exporter* {
+			reverse_proxy unix//run/node-exporter.sock
+		}
+
+		handle /systemd/metrics {
+			uri strip_prefix /systemd
+			reverse_proxy unix//run/systemd-exporter.sock
+		}
+
+		handle /tailscale/metrics {
+			uri strip_prefix /tailscale
+			reverse_proxy http://100.100.100.100 {
+				# Required otherwise Tailscale sends a redirect response.
+				header_up Host "100.100.100.100"
+			}
+		}
+
+		# Fallback for unhandled paths
+		handle {
+			invoke 404
+		}
+	}
+
+	# Fallback for unhandled domains
+	handle {
+		invoke 404
+	}
+}
+
+tailscale.is-great.ts.net {
+	log
+
+	tls {
+		get_certificate tailscale
+	}
+
+	invoke 404
+}
