@@ -16,7 +16,7 @@
     };
   };
 
-  outputs = {...} @ inputs:
+  outputs = inputs:
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       systems = import inputs.systems;
 
@@ -45,11 +45,22 @@
 
         treefmt = {
           projectRootFile = "flake.nix";
+
+          settings.global.excludes = [
+            ".editorconfig"
+            "LICENSE"
+            "**/node_modules"
+            "**/package-lock.json"
+            "src/**"
+          ];
+
           programs = {
             # Enable alejandra, a Nix formatter.
             alejandra.enable = true;
+
             # Enable deadnix, a Nix linter/formatter that removes un-used Nix code.
             deadnix.enable = true;
+
             # Enable prettier, a generic formatter usually used for JavaScript.
             prettier = {
               enable = true;
@@ -59,13 +70,7 @@
                 "*.md"
               ];
             };
-            # Enable shellcheck, a shell script linter.
-            shellcheck.enable = true;
-            # Enable shfmt, a shell script formatter.
-            shfmt = {
-              enable = true;
-              indent_size = 0; # 0 causes shfmt to use tabs
-            };
+
             # Enable yamlfmt, a YAML formatter.
             yamlfmt = {
               enable = true;
@@ -75,12 +80,6 @@
               };
             };
           };
-
-          settings.global.excludes = [
-            "**/node_modules"
-            "**/package-lock.json"
-            "src/**"
-          ];
         };
       };
     };
