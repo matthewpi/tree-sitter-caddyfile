@@ -40,6 +40,9 @@
             nodePackages.node-gyp
             python3
             tree-sitter
+
+            cargo
+            rustc
           ];
         };
 
