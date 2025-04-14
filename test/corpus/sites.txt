@@ -1,6 +1,6 @@
-============================
-Single-site with one address
-============================
+==================================
+Single Site Block with one address
+==================================
 
 example.com
 
@@ -17,9 +17,9 @@ root * /var/www
 				(matcher)
 				(argument)))))
 
-===================================
-Single-site with multiple addresses
-===================================
+=========================================
+Single Site Block with multiple addresses
+=========================================
 
 http://example.com:8080, https://fake.org:8443, fake.co.uk, {$ENV_SITE}
 
@@ -33,9 +33,9 @@ http://example.com:8080, https://fake.org:8443, fake.co.uk, {$ENV_SITE}
 			(site_address)
 			(site_address))))
 
-===============================
-Single-site with Global Options
-===============================
+=====================================
+Single Site Block with Global Options
+=====================================
 
 {
 	hello
@@ -61,7 +61,7 @@ root * /var/www
 				(argument)))))
 
 =================
-Single-site Block
+Single Site Block
 =================
 
 example.com {
