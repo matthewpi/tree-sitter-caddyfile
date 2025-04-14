@@ -1,5 +1,5 @@
 {
-  description = "Tree Sitter Grammar for Caddyfile";
+  description = "Tree Sitter Grammar for Caddyfiles";
 
   inputs = {
     flake-parts = {
@@ -55,11 +55,17 @@
           ];
 
           programs = {
+            # Enable actionlint, a GitHub Actions static checker.
+            actionlint.enable = true;
+
             # Enable alejandra, a Nix formatter.
             alejandra.enable = true;
 
             # Enable deadnix, a Nix linter/formatter that removes un-used Nix code.
             deadnix.enable = true;
+
+            # Enable pinact, a tool for pinning re-usable GitHub Actions versions.
+            pinact.enable = true;
 
             # Enable prettier, a generic formatter usually used for JavaScript.
             prettier = {
