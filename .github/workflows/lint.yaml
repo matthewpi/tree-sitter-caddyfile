@@ -1,0 +1,32 @@
+name: Lint
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - grammar.js
+  pull_request:
+    paths:
+      - grammar.js
+
+jobs:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@dbe1369d7be17e7823f8c1ee1ae8bec5779239dd # v3.9.0
+        with:
+          cache: npm
+          node-version: ${{ vars.NODE_VERSION }}
+
+      - name: Install modules
+        run: npm ci --legacy-peer-deps
+
+      - name: Run ESLint
+        run: npm run lint
