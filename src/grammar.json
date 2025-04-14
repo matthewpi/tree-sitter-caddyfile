@@ -20,13 +20,30 @@
         {
           "type": "REPEAT",
           "content": {
-            "type": "SYMBOL",
-            "name": "snippet_definition"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "snippet_definition"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "named_route"
+              }
+            ]
           }
         },
         {
-          "type": "SYMBOL",
-          "name": "sites"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "sites"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -86,6 +103,43 @@
           "content": {
             "type": "SYMBOL",
             "name": "snippet_name"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "block"
+        }
+      ]
+    },
+    "named_route_identifier": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "&("
+          },
+          {
+            "type": "PATTERN",
+            "value": "[a-zA-Z0-9\\-_]+"
+          },
+          {
+            "type": "STRING",
+            "value": ")"
+          }
+        ]
+      }
+    },
+    "named_route": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "identifier",
+          "content": {
+            "type": "SYMBOL",
+            "name": "named_route_identifier"
           }
         },
         {

@@ -176,6 +176,32 @@
     }
   },
   {
+    "type": "named_route",
+    "named": true,
+    "fields": {
+      "identifier": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "named_route_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "placeholder",
     "named": true,
     "fields": {}
@@ -293,10 +319,14 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "global_options",
+          "named": true
+        },
+        {
+          "type": "named_route",
           "named": true
         },
         {
@@ -341,6 +371,10 @@
   },
   {
     "type": "matcher_name",
+    "named": true
+  },
+  {
+    "type": "named_route_identifier",
     "named": true
   },
   {

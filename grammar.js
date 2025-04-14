@@ -8,19 +8,20 @@
 // @ts-check
 
 const subdirectiveFields = ($) => [
-    repeat(
-      choice(
-        $.url,
-        $.unix_socket,
-        $.placeholder,
-        $._string_literal,
-        $.int_literal,
-        $.argument,
-      ),
+  repeat(
+    choice(
+      $.url,
+      $.unix_socket,
+      $.placeholder,
+      $._string_literal,
+      $.int_literal,
+      $.argument,
     ),
-    choice($.block, token.immediate(/\r?\n/)),
-  ],
-  directiveFields = ($) => [optional($.matcher), ...subdirectiveFields($)];
+  ),
+  choice($.block, token.immediate(/\r?\n/)),
+];
+
+const directiveFields = ($) => [optional($.matcher), ...subdirectiveFields($)];
 
 module.exports = grammar({
   name: "caddyfile",
@@ -33,16 +34,17 @@ module.exports = grammar({
         // Allow a single "global options" block at the beginning of the file.
         optional($.global_options),
 
-        // Allow multiple snippet definitions (re-usable/importable blocks) that are shared
-        // across multiple sites.
-        repeat($.snippet_definition),
+        // Allow multiple snippet definitions and/or named routes.
+        repeat(choice($.snippet_definition, $.named_route)),
 
         // Allow site definitions, either a single site or multiple site blocks.
-        $.sites,
+        optional($.sites),
       ),
 
     // Global options is a special block that only allows the use of directives.
     // Defining snippets or named matchers is not allowed in it's scope.
+    //
+    // https://caddyserver.com/docs/caddyfile/concepts#snippets
     global_options: ($) =>
       seq("{", token.immediate(/\r?\n/), repeat($.directive), "}"),
 
@@ -52,6 +54,15 @@ module.exports = grammar({
     // Snippets must be defined outside of a site block and after global options (if present).
     snippet_name: (_) => token(seq("(", /[a-zA-Z0-9\-_]+/, ")")),
     snippet_definition: ($) => seq(field("name", $.snippet_name), $.block),
+
+    // Experimental; named routes use a syntax similar to snippets.
+    //
+    // Named routes are a special block, defined outside of site blocks.
+    //
+    // https://caddyserver.com/docs/caddyfile/concepts#named-routes
+    named_route_identifier: (_) => token(seq("&(", /[a-zA-Z0-9\-_]+/, ")")),
+    named_route: ($) =>
+      seq(field("identifier", $.named_route_identifier), $.block),
 
     // Comment is available at the start (or during) a line that contains a # with preceding whitespace
     comment: (_) => token(seq("#", /(#+(.|\r?\n)|[^#\n])*/)),

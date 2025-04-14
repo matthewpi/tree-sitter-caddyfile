@@ -1,0 +1,38 @@
+======================
+Named Route and Snippet
+======================
+
+&(named_route) {
+	# this is a re-usable named route
+}
+
+(snippet) {
+	# this is a reusable snippet
+}
+
+example.com
+
+import snippet
+
+invoke named_route
+
+---
+
+(source_file
+	(named_route
+		(named_route_identifier)
+		(block
+			(comment)))
+	(snippet_definition
+		(snippet_name)
+		(block
+			(comment)))
+	(sites
+		(single_site
+			(site_address)
+			(directive
+				(directive_name)
+				(argument))
+			(directive
+				(directive_name)
+				(argument)))))

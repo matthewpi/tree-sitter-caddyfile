@@ -1,0 +1,15 @@
+=======
+Snippet
+=======
+
+(snippet) {
+	# this is a reusable snippet
+}
+
+---
+
+(source_file
+	(snippet_definition
+		(snippet_name)
+		(block
+			(comment))))
